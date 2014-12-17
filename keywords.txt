@@ -1,0 +1,4 @@
+# Syntax coloring map for Morseo
+
+Morseo	KEYWORD1
+keyMessage	KEYWORD2
