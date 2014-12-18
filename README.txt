@@ -1,0 +1,1 @@
+A library for turning a string of text into a series of Morse code pin output events.
