@@ -22,17 +22,19 @@ int const wordSpace = timeUnit * 7;
 int const messageSpace = wordSpace * 2; // not a standard, as far as I know
 int const maxMorseLength = 6; // no more than 6 dots or dashes per character
 
+typedef void (*keyCharacter)(char);
+
 class Morseo
 {
   public:
     Morseo(int pin);	
-    void keyMessage(const char *message);
+    void keyMessage(const char *message, keyCharacter callback = NULL);
+    void getMorse(char character, char *buffer);
   private:
     int _pin;
-	void keyLetter(char letter);
-	void key(int milliseconds);
-	void getMorse(char character, char *buffer);
-	void getMorseNumber(char const number, char *buffer);
+    void keyCharacterToPin(char letter);
+    void keyPin(int milliseconds);
+    void getMorseNumber(char const number, char *buffer);
 };
 
 #endif

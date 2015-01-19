@@ -14,7 +14,7 @@ Morseo::Morseo(int pin)
 }
 
 // supply a string and the program keys it to output in morse
-void Morseo::keyMessage(const char *message)
+void Morseo::keyMessage(const char *message, keyCharacter callback)
 {
   int i = 0;
   while (message[i] != '\0')
@@ -26,7 +26,12 @@ void Morseo::keyMessage(const char *message)
     }
     else
     {
-      keyLetter(message[i]);
+      // default behavior is to write to the pin specified in the constructor..
+      // not ultra-elegant but I think it will work
+      if (callback == NULL)
+        keyCharacterToPin(message[i]);
+      else
+        callback(message[i]);
       
       // if a non-whitespace character is next then wait a bit
       if (next != '\0' && next != ' ')
@@ -42,7 +47,7 @@ void Morseo::keyMessage(const char *message)
 
 // takes a string representation of a morse letter and keys it
 // (periods and dashes only, like this: "-.-" for 'K')
-void Morseo::keyLetter(char letter)
+void Morseo::keyCharacterToPin(char letter)
 {
   char morseString[maxMorseLength + 1]; // plus 1 for the null character
   getMorse(letter, morseString);
@@ -52,11 +57,11 @@ void Morseo::keyLetter(char letter)
   {
     if (morseString[i] == '.')
     {
-      key(dot);
+      keyPin(dot);
     }
     else if (morseString[i] == '-')
     {
-      key(dash);
+      keyPin(dash);
     }
 
     // if this isn't end of string then wait a bit
@@ -67,7 +72,7 @@ void Morseo::keyLetter(char letter)
 }
 
 // key on for some time period
-void Morseo::key(int milliseconds)
+void Morseo::keyPin(int milliseconds)
 {
   digitalWrite(_pin, HIGH);
   delay(milliseconds);
